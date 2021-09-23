@@ -1,0 +1,164 @@
+=======================================================
+eksite theke onno site data anar code:
+=========================================================
+ public function btest(){
+		header('content-type:text/plain');
+		$ch = curl_init();
+		$address = "12159-McGee-Rd_Covington_LA_70435_M75521-35449";
+		$link = "https://www.realtor.com/realestateandhomes-detail/$address";
+		curl_setopt($ch, CURLOPT_URL, $link);
+		curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, FALSE);
+		curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);//1 will force cURL
+		curl_setopt($ch, CURLOPT_BINARYTRANSFER, true);
+		curl_setopt($ch, CURLOPT_FOLLOWLOCATION, true);
+		
+		$output = curl_exec($ch);
+
+		preg_match_all ('/<p id="ldp-detail-romance" class="word-wrap-break">(.*)<\/p>/U', $output, $details);
+		//$result = preg_match_all ('/<li> (.*)<\/li>/U', $output, $price);
+
+		
+		echo "<pre>"; print_r($details); die;
+	}
+
+
+
+  <?php query_posts(array(
+				  'post_type'=>'menu_left_type',
+				  'posts_per_page'=> 1
+				)); ?>
+			<?php if(have_posts()):while(have_posts()):the_post(); ?>
+				<div class="col-xs-12 col-sm-12 col-md-6 col-lg-6">
+					  <div class="menu_left">
+						<div class="menu_left_1">
+						   <h5><?php the_title(); ?></h5>
+						  <p><?php the_content(); ?></p>
+						</div>
+					  </div>
+				</div>
+<?php endwhile; endif; wp_reset_query();?>
+
+
+<?php
+ 
+$args = array ( 'post_parent' => 5 );
+query_posts( $args );
+ 
+if ( have_posts() ):
+    while ( have_posts() ) :
+        the_post();
+ 
+        // Do stuff with the post content.
+        the_title();
+        the_permalink(); // Etc.
+ 
+    endwhile;
+else:
+    // Insert any content or load a template for no posts found.
+endif;
+ 
+wp_reset_query();
+ 
+?>
+
+==============================================================
+post and pagination best code:
+==========================================================
+
+<?php
+$paged = (get_query_var('paged')) ? get_query_var('paged') : 1;
+
+$args = array(
+    'post_type'=>'post', // Your post type name
+    'posts_per_page' => 6,
+    'paged' => $paged,
+);
+
+$loop = new WP_Query( $args );
+if ( $loop->have_posts() ) {
+    while ( $loop->have_posts() ) : $loop->the_post();
+
+             // YOUR CODE
+
+    endwhile;
+
+    $total_pages = $loop->max_num_pages;
+
+    if ($total_pages > 1){
+
+        $current_page = max(1, get_query_var('paged'));
+
+        echo paginate_links(array(
+            'base' => get_pagenum_link(1) . '%_%',
+            'format' => '/page/%#%',
+            'current' => $current_page,
+            'total' => $total_pages,
+            'prev_text'    => __('« prev'),
+            'next_text'    => __('next »'),
+        ));
+    }    
+}
+wp_reset_postdata();
+?>
+
+======================================================================
+wp user login code: 
+===================================================================================
+<?php if ( isset($_POST["user_email"]) && isset($_POST["user_password"]) ) {
+
+$user_login     = esc_attr($_POST["user_email"]);
+$user_password  = esc_attr($_POST["user_password"]);
+$user_email     = esc_attr($_POST["user_email"]);
+
+$user_data = array(
+    'user_login'    =>      $user_login,
+    'user_pass'     =>      $user_password,
+    'user_email'    =>      $user_email,
+    'role'          =>      'student'
+);
+
+// Inserting new user to the db
+//wp_insert_user( $user_data );
+
+$creds = array();
+$creds['user_login'] = $user_login;
+$creds['user_password'] = $user_password;
+$creds['remember'] = true;
+
+$user = wp_signon( $creds, false );
+
+$userID = $user->ID;
+
+wp_set_current_user( $userID, $user_login );
+wp_set_auth_cookie( $userID, true, false );
+do_action( 'wp_login', $user_login );
+
+}
+
+if ( is_user_logged_in() ) : echo 'SUCCESS'; ?>
+<h1>Html for logged in user </h1>
+<?php else : echo 'FAIL!'; ?>
+<form id="user-credentials" method="post" action="<?php the_permalink(); ?>">
+    <p><input name="user_email" type="text" placeholder="Email" /></p>
+    <p><input name="user_password" type="password" placeholder="Password" /></p>
+    <p><input type="submit" class="button blue size-s" value="Submit" /></p>
+</form>
+<?php endif; ?>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
