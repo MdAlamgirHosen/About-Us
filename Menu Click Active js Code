@@ -1,0 +1,170 @@
+ <script>
+jQuery(document).ready(function() {
+jQuery('ul.menu>li').click(function(){
+ jQuery(this).parent().children('li').not(this).removeClass('active');
+jQuery(this).addClass('active');
+});
+         
+});
+</script>
+
+
+## Theme update off code
+
+add_filter( 'site_transient_update_themes', 'remove_update_themes' );
+function remove_update_themes( $value ) {
+    return null;
+}
+
+
+
+
+// Custom Taxonomy
+add_action( 'init', 'custom_taxonomy_types' );
+function custom_taxonomy_types() {
+    $labels = array(
+        'name' => _x( 'Book Categories', 'taxonomy general name' ),
+        'singular_name' => _x( 'Type', 'taxonomy singular name' ),
+        'search_items' =>  __( 'Search Ship Type' ),
+        'all_items' => __( 'All Book Categories' ),
+        'parent_item' => __( 'Parent Types' ),
+        'parent_item_colon' => __( 'Parent Types:' ),
+        'edit_item' => __( 'Edit Book Categories' ),
+        'update_item' => __( 'Update Book Categories' ),
+        'add_new_item' => __( 'Add New Book Categories' ),
+        'new_item_name' => __( 'New Ship Type Name' ),
+    );
+
+    $args = array(
+        'hierarchical'      => true,
+        'labels'            => $labels,
+        'show_ui'           => true,
+        'show_admin_column' => true,
+        'query_var'         => true,
+        'rewrite'           => array( 'slug' => 'book-cat' ),
+    );
+    //register_taxonomy( 'taxonomy_name', 'post_type', $args );
+    register_taxonomy( 'book-cat', 'book', $args );
+} // End custom taxonomy
+
+// Add custom category filter option
+add_action( 'restrict_manage_posts', 'book_type_taxonomy_filter_list' );
+function book_type_taxonomy_filter_list() {
+    $screen = get_current_screen();
+    global $wp_query;
+    if ( $screen->post_type == 'book' ) {
+        wp_dropdown_categories( array(
+            'show_option_all' => 'All Book Categories',
+            'taxonomy' => 'book-cat',
+            'name' => 'book-cat',
+            'orderby' => 'name',
+            'selected' => ( isset( $wp_query->query['book-cat'] ) ? $wp_query->query['book-cat'] : '' ),
+            'hierarchical' => true,
+            'depth' => 3,
+            'show_count' => false,
+            'hide_empty' => true,
+        ) );
+    }
+}
+
+add_filter( 'parse_query','book_type_cat_perform_filtering' );
+function book_type_cat_perform_filtering( $query ) {
+    $qv = &$query->query_vars;
+    if( is_admin() ){
+        if ( ( !empty($qv['book-cat'] ) && $qv['book-cat'] ) && is_numeric( $qv['book-cat'] ) ) {
+            $term = get_term_by( 'id', $qv['book-cat'], 'book-cat' );
+            $qv['book-cat'] = $term->slug;
+        }
+    }
+}
+
+
+================================================================================
+wc product filter without sticky posts: 
+===============================================================================
+wc product filter without sticky posts: 
+<div class="features">
+	<div class="container">
+		<div class="row">
+			<?php 
+			$args = array(
+				"hide_empty"=> 0,
+				"post_type" => "product",      
+				"taxonomy" =>"product_cat",
+				"orderby"   => "name",
+				"order"     => "DESC"
+			);
+			$cats = get_categories( $args);
+			foreach ($cats as $cat) {
+			?>
+			<div class="col-12">
+				<div class="category">
+					<h2><?php echo $cat->name;?> </h2>
+					<p><?php echo $cat->description;?></p>
+				</div>
+			</div>
+			<?php					
+				$args = array(
+					'post_type'         => 'product',
+					'post_status'       => 'publish',
+					'posts_per_page'    => 8,
+					'tax_query' => array(
+								array(
+									'taxonomy' => 'product_cat',
+									'field'    => 'slug',
+									'terms'    => $cat->slug,
+								),
+								array(
+									'taxonomy' => 'product_visibility',
+									'field'    => 'name',
+									'terms'    => 'featured',
+									'operator' => 'NOT IN',
+								),
+							),
+					); 	
+				$catquery = new WP_Query( $args);				
+				// The Loop 
+				   while($catquery->have_posts()) : $catquery->the_post(); ?>
+				    	<div class="col-md-3 col-sm-6 col-lg-3">
+							<div class="feature product-list">	
+							<span class="quick-view-text">Quick Review</span>	
+								 <?php $featured_img_url = get_the_post_thumbnail_url();?>
+								<a class="zoom_image" href="<?php echo $featured_img_url;?>"> <span class="quick-view"><i class="fas fa-search"></i></span></a>							
+								 <div class="product-img">
+							        <a href="<?php echo esc_url( get_permalink() ); ?>"><?php the_post_thumbnail();?></a>
+								 </div>
+								<div class="details">
+									<h3 class="woocommerce-loop-product__title"><a href="<?php echo esc_url( get_permalink() ); ?>"><?php echo get_the_title();?></a></h3>
+									<p><?php 
+									if(get_post_meta( get_the_ID(), '_sale_price', true)){
+										echo  $currency. get_post_meta( get_the_ID(), '_sale_price', true).' per KG';
+									}else{
+
+										echo $currency.get_post_meta( get_the_ID(), '_regular_price', true).' per KG';
+									}?></p> 
+									
+									<?php echo '<a href="">'; do_action( 'woocommerce_after_shop_loop_item' );?>
+									<!-- <a href="<//?php echo esc_url( get_permalink() ); ?>" class="btn btn-sm btn-custom">Add To Card</a> -->
+								</div>  
+							</div>
+						</div>
+				   <?php endwhile;  
+
+				wp_reset_postdata(); 
+			} // done the foreach statement  
+			
+			wp_reset_query();
+			?>
+		</div>
+	</div>
+</div>
+
+
+
+
+
+
+
+
+
+
