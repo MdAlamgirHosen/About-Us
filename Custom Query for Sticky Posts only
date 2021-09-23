@@ -1,0 +1,115 @@
+
+/*=============================================
+Previous/Next post  
+=============================================*/
+Previous/Next post
+ <div class="post-pagenav">
+<?php previous_post_link(' %link', 'Previous Post', true);
+next_post_link('%link ', 'Next Post', true); ?>
+</div>
+
+
+<?php
+/**
+Custom Query for Sticky Posts only
+----------------------------------
+*/
+$sticky = get_option( 'sticky_posts' );
+$args = array(
+'posts_per_page'      => 10, // Number of sticky posts to get
+'post__in'            => $sticky,
+'ignore_sticky_posts' => 1
+);
+
+if ( !empty($sticky) ):
+// has sticky posts
+query_posts($args);
+
+$stickyPosts = new WP_query();
+$stickyPosts->query($args);
+if ( $stickyPosts->have_posts() ):
+?>
+
+<!-- Sticky Posts Section -->
+
+<div class="sticky-posts clearfix">
+
+<!-- Intro -->
+<div class="section-intro"><p><strong class="section-title">Sticky Articles Section</strong> <span>&bull;</span> <em class="section-description">Some short section description</em></p></div>
+
+<?php
+while ( $stickyPosts->have_posts() ) : $stickyPosts->the_post();
+?>
+<article>
+<div class="entry-meta clearfix"><span class="author"><?php _e('by: '); the_author_posts_link(); ?></span> <span class="topic"><?php the_category( ', ' ); ?></span></div>
+<h4><a href="<?php the_permalink(); ?>"><?php the_title(); ?></a></h4>
+<div class="excerpt">
+<figure class="alignleft">
+<a href="<?php the_permalink(); ?>"><?php the_post_thumbnail('thumbnail'); ?></a>
+<figcaption><?php echo get_post(get_post_thumbnail_id())->post_excerpt; ?></figcaption>
+</figure>
+<?php the_excerpt();?>
+<p><a href="<?php the_permalink()?>" title="<?php the_title_attribute( array( 'before' => __('Continue reading: '), 'after' => ' &rarr;' ) ); ?>"> <?php _e( 'Continue Reading <span class="meta-nav">&rarr;</span>'); ?></a></p>
+</div>
+</article>
+<?php
+endwhile; //end loop for sticky posts
+endif; //have_posts()
+?>
+
+</div> <!-- end .sticky-posts -->
+<?php
+// RESET THE QUERY
+wp_reset_query();
+endif; //has sticky posts
+
+//END Custom Query for Sticky Posts only
+?>
+
+
+// wp sticky posts form function
+
+
+// @ https://digwp.com/2018/08/shortcode-display-recent-posts/
+function shapeSpace_recent_posts_shortcode($atts, $content = null) {
+
+global $post;
+
+
+extract(shortcode_atts(array(
+'cat'     => '',
+'num'     => '3',
+'order'   => 'DESC',
+'orderby' => 'post_date',
+
+), $atts));
+$sticky = get_option( 'sticky_posts' );
+$args = array(
+'cat'            => $cat,
+'posts_per_page' => $num,
+'order'          => $order,
+'orderby'        => $orderby,
+'post__in'            => $sticky,
+'ignore_sticky_posts' => 1
+);
+
+$output = '';
+
+$posts = get_posts($args);
+
+foreach($posts as $post) {
+
+setup_postdata($post);
+
+
+$output .= '<li><a href="'. get_the_permalink() .'">'. get_the_post_thumbnail() .'</a> <h2><a href="'. get_the_permalink() .'">'. get_the_title() .'</a></h2><a class="read_more_btn recentpost" href="'. get_the_permalink() .'">Read More</a> </li>';
+
+}
+
+wp_reset_postdata();
+
+return '<ul class="blog_posts_area recentpost">'. $output .'</ul>';
+
+}
+add_shortcode('recent_posts', 'shapeSpace_recent_posts_shortcode');
+
