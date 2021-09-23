@@ -1,0 +1,122 @@
+WP Customize API:
+$wp_customize->add_section('copyright_section', array(
+        'title'    => __('Footer Options', 'ahp'),
+        'description' => '',
+        'priority' => 120,
+    ));
+    $wp_customize->add_setting( 'footer_logo', array(
+        'default' => get_bloginfo('template_directory') . './assets/img/logo.png',
+    ) );
+
+    $wp_customize->add_control( new WP_Customize_Image_Control( $wp_customize, 'footer_logo', array(
+        'label'   => 'Footer Logo',
+        'section' => 'copyright_section',
+        'settings'   => 'footer_logo',
+    ) ) ); 
+////////for social icon:
+    $wp_customize->add_section('theme_genarel_option', array(
+        'title'    => __('Header Genaral Options', 'dd_theme'),
+        'description' => '',
+        'priority' => 120,
+    ));
+
+    //  =============================
+    //  = Social icon           =
+    //  =============================
+    $wp_customize->add_setting('social_icon_f', array(
+        'default'        => 'facebook',
+        'transport'     => 'refresh'
+    ));
+  
+    $wp_customize->add_control('social_icon_f', array(
+        'label'      => __('Facebook:', 'dd_theme'),
+        'section'    => 'theme_genarel_option',
+        'type'   => 'text',
+    ));    
+    $wp_customize->add_setting('social_icon_f_url', array(
+        'default'        => 'www.facebook.com',
+        'transport'     => 'refresh'
+    ));
+  
+    $wp_customize->add_control('social_icon_f_url', array(
+        'label'      => __('Facebook Url:', 'dd_theme'),
+        'section'    => 'theme_genarel_option',
+        'type'   => 'text',
+    ));  
+    $wp_customize->add_setting('social_icon_t', array(
+        'default'        => 'twitter',
+        'transport'     => 'refresh'
+    ));
+  
+    $wp_customize->add_control('social_icon_t', array(
+        'label'      => __('Twitter:', 'dd_theme'),
+        'section'    => 'theme_genarel_option',
+        'type'   => 'text',
+    ));    
+    $wp_customize->add_setting('social_icon_t_url', array(
+        'default'        => 'www.twitter.com',
+        'transport'     => 'refresh'
+    ));
+  
+    $wp_customize->add_control('social_icon_t_url', array(
+        'label'      => __('Twitter Url:', 'dd_theme'),
+        'section'    => 'theme_genarel_option',
+        'type'   => 'text',
+    ));  
+    $wp_customize->add_setting('social_icon_l', array(
+        'default'        => 'linkedin',
+        'transport'     => 'refresh'
+    ));
+  
+    $wp_customize->add_control('social_icon_l', array(
+        'label'      => __('Linkedin:', 'dd_theme'),
+        'section'    => 'theme_genarel_option',
+        'type'   => 'text',
+    ));    
+    $wp_customize->add_setting('social_icon_l_url', array(
+        'default'        => 'www.linkedin.com',
+        'transport'     => 'refresh'
+    ));
+  
+    $wp_customize->add_control('social_icon_l_url', array(
+        'label'      => __('Linkedin Url:', 'dd_theme'),
+        'section'    => 'theme_genarel_option',
+        'type'   => 'text',
+    ));   
+    $wp_customize->add_setting('social_icon_i', array(
+        'default'        => 'instagram',
+        'transport'     => 'refresh'
+    ));
+  
+    $wp_customize->add_control('social_icon_i', array(
+        'label'      => __('Instagram:', 'dd_theme'),
+        'section'    => 'theme_genarel_option',
+        'type'   => 'text',
+    ));    
+    $wp_customize->add_setting('social_icon_i_url', array(
+        'default'        => 'www.instagram.com',
+        'transport'     => 'refresh'
+    ));
+  
+    $wp_customize->add_control('social_icon_i_url', array(
+        'label'      => __('Instagram Url:', 'dd_theme'),
+        'section'    => 'theme_genarel_option',
+        'type'   => 'text',
+    ));  
+//  =============================
+//  = Front End part           =
+//  =============================
+<?php if(empty(get_theme_mod( 'footer_about_text' ))){ echo "All types of Services are provided to the patient";}else{echo get_theme_mod( 'footer_about_text' ); } ?>
+
+<img src="<?php if (get_theme_mod( 'footer_logo' )) : echo get_theme_mod( 'footer_logo'); else: echo get_template_directory_uri().'./assets/img/logo.png'; endif; ?>" alt="Image Not Fonud !">
+
+
+
+
+////////for header logo:add_theme_support( 'custom-logo' );
+
+<?php if ( function_exists( 'the_custom_logo' ) && has_custom_logo() ) : ?>
+					    <?php the_custom_logo(); ?>
+					<?php else : ?> 
+					    <a href="<?php echo esc_url( home_url( '/' ) ); ?>" rel="home" title="<?php bloginfo( 'name' ); ?>"><img src="<?php echo get_stylesheet_directory_uri(); ?>/assets/images/home/logo.jpg" alt="<?php bloginfo( 'name' ); ?>" /></a>
+					<?php endif; ?>
