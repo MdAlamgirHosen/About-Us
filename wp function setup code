@@ -1,0 +1,76 @@
+  ===================================
+ // wp function setup code
+ =================================
+ 
+ function ahp_bootstrapping() {
+    load_theme_textdomain( "ahp" );
+    add_theme_support( "post-thumbnails" );
+    add_theme_support( "title-tag" );
+    add_theme_support( 'html5', array( 'search-form','comment-list' ) );
+    $ahp_custom_header_details = array(
+        'header-text'        => true,
+        'default-text-color' => '#222',
+        'width'              => 1200,
+        'height'             => 600,
+        'flex-height'        => true,
+        'flex-width'         => true,
+    );
+    add_theme_support( "custom-header", $ahp_custom_header_details );
+
+    $ahp_custom_logo_defaults = array(
+        "width"  => '230',
+        "height" => '50'
+    );
+    add_theme_support( "custom-logo", $ahp_custom_logo_defaults );
+
+    add_theme_support("custom-background");
+
+    register_nav_menu( "topmenu", __( "Top Menu", "ahp" ) );
+    register_nav_menu( "footermenu", __( "Footer Menu", "ahp" ) );
+
+    add_theme_support( "post-formats", array( "image", "quote", "video", "audio", "link" ) );
+
+    add_image_size("ahp-square",400,400,true); //center center
+    add_image_size("ahp-square-new1",401,401,array("left","top"));
+    add_image_size("ahp-square-new2",500,500,array("center","center"));
+    add_image_size("ahp-square-new3",600,600,array("right","center"));
+
+}
+
+add_action( "after_setup_theme", "ahp_bootstrapping" );
+
+ 
+ 
+ 
+ 
+ 
+ ===================================
+ // for auto select work
+ =================================
+<select id="category">
+<option value="Fashion">Fashion</option>
+<option value="Electronics">Electronics</option>
+</select>
+<select name="subcategory" id="subcategory">
+ <optgroup label="Fashion">
+    <option value="Men's wear">Men's wear</option>
+    <option value="Women's wear">Women's wear</option>
+  </optgroup>
+  <optgroup id="B" label="Electronics">
+    <option value="Television">Television</option>
+    <option value="Game Console">Game Console</option>
+  </optgroup>
+ </select>
+ 
+ 
+ 
+ ===================================
+//  php custom readmore btn:
+ =================================
+
+<p>
+ <?php
+$string = $row['product_desc']; 
+ $abc = substr($string, 0, 50);
+echo $abc; ?>
+ </p>
