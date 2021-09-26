@@ -46,3 +46,13 @@ echo paginate_links(array(
 ));
 } ?>
 </div> 
+
+
+===============================================================
+              wp_trim_words continue reading
+=================================================================
+
+<?php echo wp_trim_words( get_the_content(), 90, ' <a href="'. get_permalink() .'" target="_blank"> Continue Reading..</a>' );?>
+
+
+
