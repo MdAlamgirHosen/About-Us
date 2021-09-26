@@ -74,3 +74,22 @@ $string = $row['product_desc'];
  $abc = substr($string, 0, 50);
 echo $abc; ?>
  </p>
+ 
+ 
+ <?php the_time('Y/m/d') ?>
+2017/09/25
+<?php the_time('Y/n/d') ?>
+2017/9/25
+<?php the_time('F j, Y') ?>
+September 25, 2017
+<?php the_time('M j, Y') ?>
+Sep 25, 2017
+<?php the_time('h:i A') ?>
+01:01 PM
+<?php the_time('H:i a') ?>
+13:01 pm
+<?php the_time('l, F jS, Y \a\t g:i A') ?>
+Monday, September 25th, 2017 at 1:01 PM
+ 
+ 
+ 
