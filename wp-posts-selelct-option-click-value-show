@@ -1,0 +1,51 @@
+
+<?php //Code goes here
+$cat_id = get_cat_ID('');
+$args = array(
+'cat' => $cat_id,
+'post_type' => 'post',
+'post_status' => 'publish',
+'posts_per_page' => -1,
+'caller_get_posts'=> 1
+);
+
+$postbox = null;
+$postbox = new WP_Query($args);
+if( $postbox->have_posts() ): ?>
+<form name="jump">
+<select id="post-select">
+<option selected="selected">Select</option>
+<?php while( $postbox->have_posts() ): $postbox->the_post(); ?>
+<option value="<?php the_ID() ?>"><?php the_title(); ?></option>
+<?php endwhile; ?>
+</select>
+</form>
+<div id="post-selected-container"></div>
+<script type="text/javascript">
+(function($){
+$('#post-select').change(function(){
+$.ajax({
+url: '<?php echo admin_url( 'admin-ajax.php', 'http' ); ?>',
+type: 'post',
+data: 'action=change_post&id=' + this.value,
+success: function(output){
+$('#post-selected-container').html(output);
+}
+});
+});
+})(jQuery);
+</script>
+
+//function code:
+
+/*categoty dropdown*/
+// function that runs when shortcode is called
+add_action("wp_ajax_nopriv_change_post", 'change_post');
+add_action("wp_ajax_change_post", 'change_post');
+function change_post()
+{
+$thepost = get_post($_POST['id']); ?>
+<h3><a href="<?php echo get_permalink($thepost->ID);?>"><?php echo $thepost->post_title; ?></a></h3>
+<p><?php echo $thepost->post_content; ?></p> <?php
+exit;
+}
