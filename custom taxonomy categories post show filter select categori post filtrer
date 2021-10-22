@@ -1,0 +1,217 @@
+ <?php //Code goes here
+                       
+                        $args = array(
+                        'post_type' => 'settlements',
+                        'post_status' => 'publish',
+                        'posts_per_page' => -1,
+                        'caller_get_posts'=> 1
+                        );
+
+                        $postbox = null;
+                        $postbox = new WP_Query($args);
+                    
+                         ?>
+                        <div class="choose_option"> <span>Choose Category</span>
+                            <h4> </h4>
+
+                        <form name="jump">
+                        <select id="post-select">
+                        <?php $terms = get_terms("settlements-cat","", ", ", ""); $count = count($terms); if ( $count > 0 ){ foreach ( $terms as $term ) { ?>
+                        <option value="<?php echo $term->term_id;?>"><?php echo $term->name;?> </option> <?php } } ?>
+                        </select>
+                        </form>
+                        </div>
+                        <div id="post-selected-container">
+                            <?php 
+                                $args = array(
+                                    'post_type'     => 'settlements',
+                                    'posts_per_page'=>-1,
+                                );
+                                $query = new WP_Query($args);
+                               ?>
+                                <?php if ( $query->have_posts() ) : ?>
+                                 <?php while ( $query->have_posts() ) : $query->the_post();?>
+                                    <div class="col-md-4">
+                                      <div class="post_status_text">
+                                           <h4><?php echo get_the_term_list(get_the_ID(), 'settlements-cat', '', ', ', ''); ?></h4>
+                                           <h2><?php echo get_the_title($post->ID); ?></h2>
+                                           <p><?php echo get_the_content($post->ID); ?></p>
+                                      </div>
+                                  </div>
+                                  <?php endwhile; ?>
+                            <?php endif;
+                              // RESET THE QUERY
+                              wp_reset_query();
+                            ?> 
+                            
+                            
+                            
+                            
+                            
+  
+<script type="text/javascript">
+(function($){
+$('#post-select').change(function(){
+$.ajax({
+url: '<?php echo admin_url( 'admin-ajax.php', 'http' ); ?>',
+type: 'post',
+data: 'action=change_post&id=' + this.value,
+success: function(output){
+$('#post-selected-container').html(output);
+}
+});
+});
+})(jQuery);
+</script>
+
+
+
+
+/*categoty dropdown*/
+// function that runs when shortcode is called
+add_action("wp_ajax_nopriv_change_post", 'change_post');
+add_action("wp_ajax_change_post", 'change_post');
+function change_post()
+{
+$thepost = get_post($_POST['id']); 
+$args = array(
+'post_type' => 'settlements',
+'tax_query' => array(
+    array(
+    'taxonomy' => 'settlements-cat',
+    'field' => 'term_id',
+    'terms' => $thepost
+     )
+  )
+);
+$query = new WP_Query( $args );
+
+   ?>
+    <?php if ( $query->have_posts() ) : ?>
+     <?php while ( $query->have_posts() ) : $query->the_post(); ?>
+        <div class="col-md-4">
+          <div class="post_status_text">
+               <h4><?php echo get_the_term_list(get_the_ID(), 'settlements-cat', '', ', ', ''); ?></h4>
+               <h2><?php echo get_the_title($post->ID); ?></h2>
+               <p><?php echo get_the_content($post->ID); ?></p>
+               
+          </div>
+      </div>
+      <?php endwhile; ?>
+<?php endif;
+  // RESET THE QUERY
+  wp_reset_query();
+
+?>
+ <?php
+exit;
+}
+
+
+
+
+
+
+
+
+// First create a custom post type name 'Settlements'
+ 
+function diwp_movies_custom_post_type(){
+     
+    // Set labels for custom post type
+ 
+    $labels = array(
+                     'name' => 'Settlements',
+                     'singular_name' => 'Settlements',
+                     'add_new'    => 'Add New',
+                     'add_new_item' => 'Enter Movie Details',
+                     'all_items' => 'All Settlements',
+                     'featured_image' => 'Add Poster Image',
+                     'set_featured_image' => 'Set Poster Image',
+                     'remove_featured_image' => 'Remove Poster Image'
+ 
+                   );
+ 
+ 
+    // Set Options for this custom post type;
+ 
+    $args = array(    
+                    'public' => true,
+                    'label'       => 'Settlements',
+                    'labels'      => $labels,
+                    'description' => 'Settlements is a collection of movies and their info',  
+                    'supports'   => array( 'title', 'editor', 'thumbnail'),
+                    'capability_type' => 'page',
+                     
+                 );
+ 
+    register_post_type('settlements', $args);
+ 
+}
+ 
+add_action( 'init', 'diwp_movies_custom_post_type' );
+ 
+// Custom Post Type ends here.
+
+
+
+
+// Custom Taxonomy
+add_action( 'init', 'custom_taxonomy_types' );
+function custom_taxonomy_types() {
+    $labels = array(
+        'name' => _x(
+ 'Categories', 'taxonomy general name' ),
+        'singular_name' => _x(
+ 'Type', 'taxonomy singular name' ),
+        'search_items' =>  __( 'Search Ship Type' ),
+        'all_items' => __( 'All Settlements Categories' ),
+        'parent_item' => __( 'Parent Types' ),
+        'parent_item_colon' => __( 'Parent Types:' ),
+        'edit_item' => __( 'Edit Settlements Categories' ),
+        'update_item' => __( 'Update Settlements Categories' ),
+        'add_new_item' => __( 'Add New Settlements Categories' ),
+        'new_item_name' => __( 'New Ship Type Name' ),
+    );
+
+    $args = array(
+        'hierarchical'      => true,
+        'labels'            => $labels,
+        'show_ui'           => true,
+        'show_admin_column' => true,
+        'query_var'         => true,
+        'rewrite'           => array( 'slug' => 'settlements-cat' ),
+    );
+    //register_taxonomy( 'taxonomy_name', 'post_type', $args );
+    register_taxonomy( 'settlements-cat', 'settlements', $args );
+} // End custom taxonomy
+
+// Add custom category filter option
+add_action( 'restrict_manage_posts', 'Settlements_type_taxonomy_filter_list' );
+function Settlements_type_taxonomy_filter_list() {
+    $screen = get_current_screen();
+    global $wp_query;
+    if ( $screen->post_type == 'settlements' ) {
+        wp_dropdown_categories( array(
+            'show_option_all' => 'All Settlements Categories',
+            'taxonomy' => 'settlements-cat',
+            'name' => 'settlements-cat',
+            'orderby' => 'name',
+            'selected' => ( isset( $wp_query->query['settlements-cat'] ) ? $wp_query->query['settlements-cat'] : '' ),
+            'hierarchical' => true,
+            'depth' => 3,
+            'show_count' => false,
+            'hide_empty' => true,
+        ) );
+    }
+}
+
+
+
+
+
+                            
+                            
+                            
+                            
+                            
