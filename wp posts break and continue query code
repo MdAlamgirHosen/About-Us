@@ -1,0 +1,36 @@
+<div class="footer_practical_area">
+
+<?php
+
+$args = array(
+'post_type'     => 'Practice Area',
+'orderby' => 'ID',
+'order' => 'DESC',
+'showposts' => 8
+);
+$args2 = array(
+'post_type' => 'Practice Area',
+'orderby' => 'ID',
+'order' => 'DESC',
+'showposts' => 8,
+'offset' => 8 );
+ $the_query = new WP_Query($args);
+ $wp_query = new WP_Query($args2);
+?>
+<ul class="wp-block-latest-posts__list left wp-block-latest-posts">	
+ <?php if ( $the_query->have_posts() ) : ?>
+        <?php while ( $the_query->have_posts() ) : $the_query->the_post();?>
+        <li><a href="<?php the_permalink(); ?>"><?php echo get_the_title($post->ID); ?></a></li>
+      <?php endwhile; ?>
+<?php endif; ?>
+</ul>	
+<ul class="wp-block-latest-posts__list right wp-block-latest-posts">	
+<?php if ( $wp_query->have_posts() ) : ?>
+        <?php while ( $wp_query->have_posts() ) : $wp_query->the_post();?>
+        <li><a href="<?php the_permalink(); ?>"><?php echo get_the_title($post->ID); ?></a></li>
+      <?php endwhile; ?>
+<?php endif;
+  wp_reset_query();
+?> 
+</ul>
+</div>
