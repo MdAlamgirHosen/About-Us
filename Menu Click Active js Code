@@ -1,4 +1,25 @@
- <script>
+ <script type="text/javascript">
+jQuery(document).ready(function($){
+	$("#menu-main-menu .menu-item-has-children").click(function(){
+	$("#menu-main-menu .menu-item-has-children").not(this).removeClass("sub-active");
+	$(this).toggleClass("sub-active");
+	});
+});
+</script>
+
+## menu carot icon css
+.menu-item-has-children::after {
+	position: absolute;
+	top: 14px;
+	right: -15px;
+	content: '\1F893';
+	font-size: 32px;
+	color: #fff;
+	padding: 10px 0 10px 10px;
+}
+
+
+<script>
 jQuery(document).ready(function() {
 jQuery('ul.menu>li').click(function(){
  jQuery(this).parent().children('li').not(this).removeClass('active');
