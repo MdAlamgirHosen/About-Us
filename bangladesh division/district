@@ -1,0 +1,65 @@
+
+
+
+<div id="wppb_submit_button_div searchform">
+                <li class="wppb-form-field wppb-default-last-name" id="wppb-form-element-4">
+            <label for="divisionform">Division</label>
+             <div class="form-group">
+                    <!--Division Section-->
+                    <select id="divisionform" class="form-control" name="website">
+                    <option>Select Division</option>
+                    <option value="Barishal" data-id="2">Barishal</option>
+                    <option value="Chattogram" data-id="3">Chattogram</option>
+                    <option value="Dhaka" data-id="4">Dhaka</option>
+                    <option value="Khulna" data-id="5">Khulna</option>
+                    <option value="Rajshahi" data-id="6">Rajshahi</option>
+                    <option value="Sylhet" data-id="7">Sylhet</option>
+                    <option value="Rangpur" data-id="8">Rangpur</option>
+                    <option value="Mymensingh" data-id="9">Mymensingh</option>
+                  </select>
+              </div></li>
+              <div class="form-group"> <!--Districts Section-->
+                  <li class="wppb-form-field wppb-default-last-name" id="wppb-form-element-5">
+            <label for="districtform">District</label>
+                 <select id="districtform" class="form-control" name="description">
+                   <option selected="selected" value="">Select District</option>
+                 </select><!--/ Districts Section-->
+                </li>     
+              </div>   
+              <div class="form-group">
+                  <!--Police Station Section-->
+                   <li class="wppb-form-field wppb-default-last-name" id="wppb-form-element-6">
+                   <label for="upozillaform">Upozilla</label>
+                       <select id="upozillaform" class="form-control" name="url">
+                    <option selected="selected" value="">Select Upozilla</option>
+                  </select><!--/ Police Station Section-->
+                  </li>
+              </div>
+        </div>  
+
+
+
+<script type="text/javascript">
+jQuery(document).ready(function() {
+    jQuery('#divisionform').on('change', function() {
+        valdivi = this.value;
+   jQuery('#division_list').val(jQuery('#division_list').val() + valdivi);   
+  });  
+});  
+</script>
+<script type="text/javascript">
+jQuery(document).ready(function() {
+    jQuery('#districtform').on('change', function() {
+        valdis = this.value;
+   jQuery('#district_list').val(jQuery('#district_list').val() + valdis);   
+  });  
+});  
+</script>
+<script type="text/javascript">
+jQuery(document).ready(function() {
+    jQuery('#upozillaform').on('change', function() {
+        valupozilla = this.value;
+   jQuery('#upozilla_list').val(jQuery('#upozilla_list').val() + valupozilla);   
+  });  
+});  
+</script>
