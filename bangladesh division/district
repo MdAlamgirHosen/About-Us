@@ -63,3 +63,11 @@ jQuery(document).ready(function() {
   });  
 });  
 </script>
+
+
+
+//Image echo code
+
+echo "<img src="; echo get_template_directory_uri(); echo "/assets/img/1.png"; echo ">";
+
+
