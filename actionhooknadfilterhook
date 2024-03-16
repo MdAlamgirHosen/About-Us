@@ -1,0 +1,11 @@
+Action Hook :
+<?php do_action('action_hook_test')?> apply for fontend where show result
+
+Apply in function:
+function eifunctioncustomarkaj(){
+  echo "do something about your project";
+}
+add_action('action_hook_test', 'eifunctioncustomarkaj');
+
+
+Filter Hook:
