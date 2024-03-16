@@ -12,10 +12,10 @@ Filter Hook:
 
 theme er jekono jaygay or function er static content ke dymanic kora jay: sekhanei apply_filter kore function theke modify kora valo update kora jay.
 
-<?php apply_filter("filter_hook_test","Hellow World")?>
+<?php apply_filter("filter_hook_test","Hellow World","Hellow World","Hellow World")?>
 
-function filter_hook_work($test){
-  return strtoupper($test)
+function filter_hook_work($test,$test1,$test2){
+  return strtoupper($test). strtoupper($test1). strtoupper($test2)
 }
 
-add_filter('filter_hook_test', 'filter_hook_work');
+add_filter('filter_hook_test', 'filter_hook_work',10,3);
