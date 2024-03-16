@@ -1,0 +1,22 @@
+
+<?php 
+$curl = curl_init();
+curl_setopt_array($curl, array(
+  CURLOPT_URL => 'https://www.googleapis.com/pagespeedonline/v5/runPagespeed?url='.$websiteurl.'&strategy=desktop&category=performance&category=accessibility&category=best-practices&category=seo',
+  CURLOPT_RETURNTRANSFER => true,
+  CURLOPT_ENCODING => '',
+  CURLOPT_MAXREDIRS => 10,
+  CURLOPT_TIMEOUT => 0,
+  CURLOPT_FOLLOWLOCATION => true,
+  CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+  CURLOPT_CUSTOMREQUEST => 'GET',
+));
+
+$desktop_data = curl_exec($curl);
+
+curl_close($curl);
+// print_r($response);
+$obj = json_decode($desktop_data);
+$desktop_score = $obj->lighthouseResult->categories->performance->score;
+
+?>
