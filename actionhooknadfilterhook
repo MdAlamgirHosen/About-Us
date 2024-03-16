@@ -10,6 +10,8 @@ add_action('action_hook_test', 'eifunctioncustomarkaj');
 
 Filter Hook:
 
+theme er jekono jaygay or function er static content ke dymanic kora jay: sekhanei apply_filter kore function theke modify kora valo update kora jay.
+
 <?php apply_filter("filter_hook_test","Hellow World")?>
 
 function filter_hook_work($test){
