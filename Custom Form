@@ -1,0 +1,42 @@
+<form class="form-inline form" method="POST" action="<?php echo site_url();?>/online-evaluation/">    
+                    <div class="main_form_content">
+                        <div class="form-group">
+                            <input required type="text" class="form-control" id="keyword" placeholder="Keyword or Phrase" name="keyword">
+                        </div>
+                        <div class="form-group">
+                        <input type="text" class="form-control" id="address" placeholder="Enter your full Address" name="address">
+                        </div>
+                        <div class="form-group">
+                            <input required type="email" class="form-control" id="email" placeholder="Email" name="email">
+                        </div>
+                        <div class="form-group">
+                        <input required type="url" class="form-control" id="websiteurl" placeholder="Website URL" name="websiteurl">
+                        </div>
+                    </div>
+                    <button type="submit" class="btn btn-default">Get Analysis</button>
+                </form>
+
+
+
+
+
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+  session_start();
+ if (isset($_REQUEST['keyword'])) {
+   $_SESSION["keyword"] = $_REQUEST['keyword'];
+   $keyword = $_SESSION["keyword"];
+ }
+ if (isset($_REQUEST['address'])) {
+ $_SESSION["address"] = $_REQUEST['address'];
+   $address = $_SESSION["address"];
+ }
+ if (isset($_REQUEST['email'])) {
+ $_SESSION["email"] = $_REQUEST['email'];
+   $email = $_SESSION["email"];
+ }
+ if (isset($_REQUEST['websiteurl'])) {
+   $_SESSION["websiteurl"] = $_REQUEST['websiteurl'];
+   $websiteurl = $_SESSION["websiteurl"];
+ }
+ 
+}
