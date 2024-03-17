@@ -40,3 +40,20 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
  }
  
 }
+
+
+
+
+// Session Destoy:
+add_action( 'woocommerce_before_thankyou', 'remove_session_after_payment' );
+function remove_session_after_payment( $order_id ){
+ 	unset($_SESSION['pickup']);
+ 	unset($_SESSION['ddoff']);
+	unset($_SESSION['date']);
+ 	unset($_SESSION['appt']);
+	unset($_SESSION['fnumber']);
+ 	unset($_SESSION['carseat']);
+	unset($_SESSION['boosterseat']);
+}
+
+
