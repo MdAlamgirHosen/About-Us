@@ -1,0 +1,208 @@
+// CSS
+/* 
+Plugin Name: wpblocktheme
+Plugin URI:
+Author: Alamgir
+Author URI:
+Tested up to: 6.1
+Requires PHP: 5.6
+Version: 1.3
+License: GNU General Public License v2 or later
+License URI: http://www.gnu.org/licenses/gpl-2.0.html
+Description: This is simple wp block theme for develope (FSE) full site editing.
+Text Domain: wpbtheme
+Tags: one-column, custom-colors, custom-menu, custom-logo, editor-style, featured-images, full-site-editing, block-patterns, rtl-language-support, sticky-post, threaded-comments, accessibility-ready
+*/
+
+
+/* Css Font */
+@import url('https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap');
+
+// Functions
+<?php
+
+if ( ! function_exists( 'wpbtheme_setup' ) ) :
+    /**
+     * Sets up theme defaults and registers support for various WordPress features.
+     *
+     * Note that this function is hooked into the after_setup_theme hook, which runs
+     * before the init hook.
+     */
+    function wpbtheme_setup() {
+        // Add support for block styles.
+        add_theme_support( 'wp-block-styles' );
+        add_theme_support( 'post-thumbnails' );
+        add_theme_support( 'responsive-embeds' );
+        add_theme_support( 'editor-styles' );
+        add_theme_support( 'html5', array('style','script', ) );
+        add_theme_support( 'automatic-feed-links' );
+    
+        // Enqueue editor styles.
+        add_editor_style( 'editor-style.css' );
+    }
+    endif; // wpbtheme_setup
+    add_action( 'after_setup_theme', 'wpbtheme_setup' );
+    
+
+/** ====================================================================
+ *                Enqueue the stylesheet.                
+ *===================================================================*/
+
+ if ( ! function_exists( 'wpbtheme_styles' ) ) :
+
+    function wpbtheme_styles() {
+      // Register Stylesheet
+      wp_enqueue_style('wpbtheme-style', get_stylesheet_uri(), array(), wp_get_theme()->get('Version'));
+      wp_enqueue_style('wpbtheme-style-blocks', get_template_directory_uri() . '/assets/css/blocks.css');
+    }
+  
+  endif;
+  
+add_action( 'wp_enqueue_scripts', 'wpbtheme_styles' );
+
+
+
+// Theme json
+{
+	"$schema": "https://schemas.wp.org/trunk/theme.json",
+	"version": 2,
+	"settings": {
+	  "layout": {
+		"contentSize": "1183px",
+		"wideSize": "1183px"
+	  },
+	  "color": {
+		"palette": [
+		  {
+			"slug": "wpbtheme-black",
+			"color": "#333333",
+			"name": "Black"
+		  },
+		  {
+			"slug": "wpbtheme-red",
+			"color": "#e30000",
+			"name": "Red"
+		  },
+		  {
+			"slug": "wpbtheme-white",
+			"color": "#ffffff",
+			"name": "white"
+		  }
+		]
+	  },
+	  "typography": {
+		"fontFamilies": [
+		  {
+			"fontFamily": "'Inter', sans-serif",
+			"slug": "inter",
+			"name": "Body - Inter",
+			"fontFace": [
+			  {
+				"fontFamily": "'Inter', sans-serif",
+				"fontWeight": "300",
+				"fontStyle": "normal",
+				"fontStretch": "normal",
+				"src": ["file:./assets/fonts/inter/Inter-Light.ttf"]
+			  },
+			  {
+				"fontFamily": "'Inter', sans-serif",
+				"fontWeight": "400",
+				"fontStyle": "normal",
+				"fontStretch": "normal",
+				"src": ["file:./assets/fonts/inter/Inter-Regular.ttf"]
+			  }
+			]
+		  },
+		  {
+			"fontFamily": "Ubuntu, sans-serif",
+			"slug": "Ubuntu",
+			"name": "Headings - Ubuntu",
+			"fontFace": [
+				{
+				  "fontFamily": "'Ubuntu', sans-serif",
+				  "fontWeight": "300",
+				  "fontStyle": "normal",
+				  "fontStretch": "normal",
+				  "src": ["file:./assets/fonts/Ubuntu/Ubuntu-Light.ttf"]
+				},
+				{
+				  "fontFamily": "'Ubuntu', sans-serif",
+				  "fontWeight": "400",
+				  "fontStyle": "normal",
+				  "fontStretch": "normal",
+				  "src": ["file:./assets/fonts/Ubuntu/Ubuntu-Regular.ttf"]
+				}
+			  ]
+		  }
+		]
+	  },
+	  "custom": {
+		"typography": {
+		  "font-size": {
+			"heading-1": "clamp(2.113rem, 1.9252rem + 0.9390000000000001vw, 3.052rem)",
+			"heading-2": "clamp(1.699rem, 1.5506000000000002rem + 0.7419999999999998vw, 2.441rem)",
+			"heading-3": "clamp(1.35rem, 1.2294rem + 0.603vw, 1.953rem)",
+			"heading-4": "clamp(1.253rem, 1.1909999999999998rem + 0.31000000000000005vw, 1.563rem)",
+			"heading-5": "clamp(1.063rem, 1.0255999999999998rem + 0.18700000000000006vw, 1.25rem)",
+			"heading-6": "clamp(1.063rem, 1.0255999999999998rem + 0.18700000000000006vw, 1.25rem)"
+		  }
+		},
+		"line-height": {
+		  "tiny": 1.15,
+		  "small": 1.3,
+		  "medium": 1.4,
+		  "normal": 1.6
+		}
+	  }
+	 
+	},
+	"styles": {
+		"color": {
+			"background": "var(--wp--preset--color--white)",
+			"text": "var(--wp--preset--color--wpbtheme-red)"
+		},
+		"typography": {
+			"fontFamily": "var(--wp--preset--font-family--ubuntu)",
+			"lineHeight": "1.75",
+			"fontSize": "1rem"
+		},
+		"elements": {
+			"h1": {
+			  "typography": {
+				"fontFamily": "var(--wp--preset--font-family--ubuntu)",
+				"fontWeight": "800",
+				"lineHeight": "1.3",
+				"fontSize": "var(--wp--custom--typography--font-size--heading-1)"
+			   }
+		    },
+			"h2": {
+				"typography": {
+				  "fontFamily": "var(--wp--preset--font-family--inter)",
+				  "fontWeight": "700",
+				  "lineHeight": "1.3",
+				  "fontSize": "var(--wp--custom--typography--font-size--heading-2)"
+				 }
+			  }		
+		}
+	},
+	"templateParts": [
+		{
+		  "name": "header",
+		  "area": "header",
+		  "title": "Header"
+		},
+		{
+		  "name": "footer",
+		  "area": "footer",
+		  "title": "Footer"
+		}
+	  ]
+}
+
+
+
+
+
+
+
+
