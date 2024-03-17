@@ -20,3 +20,16 @@ $obj = json_decode($desktop_data);
 $desktop_score = $obj->lighthouseResult->categories->performance->score;
 
 ?>
+
+
+
+// ob clean content showing code: 
+       <?php 
+			  	ob_start();
+				include_once churchPLUGIN_URL."/admin/partials/tmfl/add_temp_data.php";
+				$template = ob_get_contents();
+				ob_end_clean();
+			  	echo $template;
+			  ?>
+
+
